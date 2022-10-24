@@ -11,10 +11,10 @@
    slightly modified by bmmeijers
 */
 
-#define _USE_MATH_DEFINES // https://docs.microsoft.com/en-us/cpp/c-runtime-library/math-constants?view=msvc-160
+#define _USE_MATH_DEFINES //https://docs.microsoft.com/en-us/cpp/c-runtime-library/math-constants?view=msvc-160
 #include <cmath>
 #include <iostream>
-
+#include <fstream>
 
 // these values are constant and not allowed to be changed
 const double SOLAR_MASS = 4 * M_PI * M_PI;
@@ -249,9 +249,22 @@ int main(int argc, char **argv) {
         const unsigned int n = atoi(argv[1]);
         offset_momentum(state);
         std::cout << energy(state) << std::endl;
+        std::ofstream ofs;// start to modify by zhang chi write file
+        ofs.open("cpp_output.csv", std::ios::out);
         for (int i = 0; i < n; ++i) {
             advance(state, 0.01);
+
+            for(int i = 0;i<BODIES_COUNT;++i){
+                body obj = state[i];
+                ofs<<obj.name<<";";
+                ofs<<obj.position.x<<";";
+                ofs<<obj.position.y<<";";
+                ofs<<obj.position.z<<";"<<std::endl;
+            }
+            
+            
         }
+        ofs.close();
         std::cout << energy(state) << std::endl;
         return EXIT_SUCCESS;
     }
