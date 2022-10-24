@@ -251,15 +251,16 @@ int main(int argc, char **argv) {
         std::cout << energy(state) << std::endl;
         std::ofstream ofs;// start to modify by zhang chi write file
         ofs.open("cpp_output.csv", std::ios::out);
+        ofs<<"name of the body, position x, position y, position z;"<<std::endl;
         for (int i = 0; i < n; ++i) {
             advance(state, 0.01);
 
             for(int i = 0;i<BODIES_COUNT;++i){
                 body obj = state[i];
-                ofs<<obj.name<<";";
-                ofs<<obj.position.x<<";";
-                ofs<<obj.position.y<<";";
-                ofs<<obj.position.z<<";"<<std::endl;
+                ofs<<obj.name<<",";
+                ofs<<obj.position.x<<",";
+                ofs<<obj.position.y<<",";
+                ofs<<obj.position.z<<std::endl;
             }
             
             
