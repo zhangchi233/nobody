@@ -252,7 +252,7 @@ int main(int argc, char **argv) {
         std::cout << energy(state) << std::endl;
         std::ofstream ofs;// start to modify by zhang chi write file
         if(write_decision){
-            ofs.open("cpp_release_output.csv", std::ios::out);}
+            ofs.open("cpp_debug_output.csv", std::ios::out);}
         ofs<<"name of the body, position x, position y, position z;"<<std::endl;
         for (int i = 0; i < n; ++i) {
             advance(state, 0.01);
