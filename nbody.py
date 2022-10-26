@@ -69,7 +69,11 @@ SYSTEM = tuple(BODIES.values())
 PAIRS = tuple(combinations(SYSTEM))
 
 
-def advance(dt, n, bodies=SYSTEM, pairs=PAIRS):
+def advance(dt, n, bodies=SYSTEM, pairs=PAIRS,write_decision=True):
+    if write_decision:
+        f = open("python_output.csv",'w')
+        first_line = "name,x,y,z\n"
+        f.write(first_line)
     for i in range(n):
         for ([x1, y1, z1], v1, m1, [x2, y2, z2], v2, m2) in pairs:
             dx = x1 - x2
@@ -89,7 +93,15 @@ def advance(dt, n, bodies=SYSTEM, pairs=PAIRS):
             r[0] += dt * vx
             r[1] += dt * vy
             r[2] += dt * vz
-
+        if write_decision:
+            for i in BODIES:
+                name=i
+                coordinates = BODIES[i][0]
+                x,y,z=coordinates
+                line="{},{},{},{}\n".format(name,x,y,z)
+                f.write(line)
+    if write_decision:
+        f.close()
 
 def report_energy(bodies=SYSTEM, pairs=PAIRS, e=0.0):
     for ((x1, y1, z1), v1, m1, (x2, y2, z2), v2, m2) in pairs:
@@ -113,19 +125,19 @@ def offset_momentum(ref, bodies=SYSTEM, px=0.0, py=0.0, pz=0.0):
     v[2] = pz / m
 
 
-def main(n, ref="sun"):
+def main(n, ref="sun",write_decision=True):
     offset_momentum(BODIES[ref])
     report_energy()
-    advance(0.01, n)
+    advance(0.01, n, write_decision=write_decision)
     report_energy()
 
 
 if __name__ == "__main__":
-    if len(sys.argv) >= 2:
-        main(int(sys.argv[1]))
+    if len(sys.argv) >= 3:
+        main(int(sys.argv[1]),write_decision=bool(sys.argv[2]))
         sys.exit(0)
     else:
-        print(f"This is {sys.argv[0]}")
+        #print(f"This is {sys.argv[0]}")
         print("Call this program with an integer as program argument")
         print("(to set the number of iterations for the n-body simulation).")
         sys.exit(1)
