@@ -240,20 +240,23 @@ body state[] = {
 
 
 int main(int argc, char **argv) {
-    if (argc != 2) {
+    if (argc != 3) {
         std::cout << "This is " << argv[0] << std::endl;
         std::cout << "Call this program with an integer as program argument" << std::endl;
         std::cout << "(to set the number of iterations for the n-body simulation)." << std::endl;
         return EXIT_FAILURE;
     } else {
         const unsigned int n = atoi(argv[1]);
+        const bool write_decision = atoi(argv[2]);
         offset_momentum(state);
         std::cout << energy(state) << std::endl;
         std::ofstream ofs;// start to modify by zhang chi write file
-        ofs.open("cpp_output.csv", std::ios::out);
+        if(write_decision){
+            ofs.open("cpp_release_output.csv", std::ios::out);}
         ofs<<"name of the body, position x, position y, position z;"<<std::endl;
         for (int i = 0; i < n; ++i) {
             advance(state, 0.01);
+            if(write_decision){
 
             for(int i = 0;i<BODIES_COUNT;++i){
                 body obj = state[i];
@@ -264,6 +267,7 @@ int main(int argc, char **argv) {
             }
             
             
+        }
         }
         ofs.close();
         std::cout << energy(state) << std::endl;
