@@ -11,6 +11,7 @@
 
 import sys
 from math import sqrt, pi as PI
+import csv
 
 
 def combinations(l):
@@ -135,9 +136,22 @@ def main(n, ref="sun",write_decision=True):
 if __name__ == "__main__":
     if len(sys.argv) >= 3:
         main(int(sys.argv[1]),write_decision=bool(sys.argv[2]))
+        # Below code was typed by shen qiwei
+        with open("python_output.csv", "w", newline="") as file:
+            csvWriter = csv.writer(file)
+            csvWriter.writerow(["name of the body", "position x", "position y", "position z"])
+            for i in range(0, int(sys.argv[1])):
+                advance(0.01, i)
+                for values in BODIES.items():
+                    x, y = values
+                    addList = [x]
+                    for j in range(0, len(y[0])):
+                        addList.append(y[0][j])
+                    csvWriter.writerow(addList)
+        # Upon code was
         sys.exit(0)
     else:
-        #print(f"This is {sys.argv[0]}")
+        print(f"This is {sys.argv[0]}")
         print("Call this program with an integer as program argument")
         print("(to set the number of iterations for the n-body simulation).")
         sys.exit(1)
