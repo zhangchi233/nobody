@@ -135,7 +135,7 @@ def main(n, ref="sun",write_decision=True):
 
 if __name__ == "__main__":
     if len(sys.argv) >= 2:
-        main(int(sys.argv[1]),write_decision=bool(sys.argv[2]))
+        main(int(sys.argv[1]))
         # Below code was typed by shen qiwei
         with open("python_output.csv", "w", newline="") as file:
             csvWriter = csv.writer(file)
