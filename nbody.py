@@ -126,7 +126,7 @@ if __name__ == "__main__":
         main(int(sys.argv[1]))
         # Below code was modified by shen qiwei
         with open("python_output.csv", "w", newline="") as file:
-            csvWriter = csv.writer(file)
+            csvWriter = csv.writer(file, delimiter=";")
             csvWriter.writerow(["name of the body", "position x", "position y", "position z"])
             for i in range(0, int(sys.argv[1])):
                 advance(0.01, i)
