@@ -263,9 +263,9 @@ int main(int argc, char **argv) {
 
             for(int i = 0;i<BODIES_COUNT;++i){
                 body obj = state[i];
-                ofs<<obj.name<<",";
-                ofs<<obj.position.x<<",";
-                ofs<<obj.position.y<<",";
+                ofs<<obj.name<<";";
+                ofs<<obj.position.x<<";";
+                ofs<<obj.position.y<<";";
                 ofs<<obj.position.z<<std::endl;
             }
             
