@@ -70,7 +70,11 @@ SYSTEM = tuple(BODIES.values())
 PAIRS = tuple(combinations(SYSTEM))
 
 
-def advance(dt, n, bodies=SYSTEM, pairs=PAIRS):
+def advance(dt, n, bodies=SYSTEM, pairs=PAIRS, writeDecision=True):
+    if writeDecision:
+        file = open("python_output.csv", "w", newline="")
+        csvWriter = csv.writer(file, delimiter=";")
+        csvWriter.writerow(["name of the body", "position x", "position y", "position z"])
     for i in range(n):
         for ([x1, y1, z1], v1, m1, [x2, y2, z2], v2, m2) in pairs:
             dx = x1 - x2
@@ -90,7 +94,15 @@ def advance(dt, n, bodies=SYSTEM, pairs=PAIRS):
             r[0] += dt * vx
             r[1] += dt * vy
             r[2] += dt * vz
-
+        if writeDecision:
+            for values in BODIES.items():
+                x, y = values
+                addList = [x]
+                for j in range(0, len(y[0])):
+                    addList.append(y[0][j])
+                csvWriter.writerow(addList)
+    if writeDecision:
+        file.close()
 
 def report_energy(bodies=SYSTEM, pairs=PAIRS, e=0.0):
     for ((x1, y1, z1), v1, m1, (x2, y2, z2), v2, m2) in pairs:
@@ -114,29 +126,16 @@ def offset_momentum(ref, bodies=SYSTEM, px=0.0, py=0.0, pz=0.0):
     v[2] = pz / m
 
 
-def main(n, ref="sun"):
+def main(n, ref="sun", writeDecision=True):
     offset_momentum(BODIES[ref])
     report_energy()
-    advance(0.01, n)
+    advance(0.01, n, writeDecision=writeDecision)
     report_energy()
 
 
 if __name__ == "__main__":
-    if len(sys.argv) >= 2:
-        main(int(sys.argv[1]))
-        # Below code was modified by shen qiwei
-        with open("python_output.csv", "w", newline="") as file:
-            csvWriter = csv.writer(file, delimiter=";")
-            csvWriter.writerow(["name of the body", "position x", "position y", "position z"])
-            for i in range(0, int(sys.argv[1])):
-                advance(0.01, i)
-                for values in BODIES.items():
-                    x, y = values
-                    addList = [x]
-                    for j in range(0, len(y[0])):
-                        addList.append(y[0][j])
-                    csvWriter.writerow(addList)
-        # Upon code was modified by shen qiwei
+    if len(sys.argv) >= 3:
+        main(int(sys.argv[1]), writeDecision=bool(sys.argv[2]))
         sys.exit(0)
     else:
         print(f"This is {sys.argv[0]}")
