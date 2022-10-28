@@ -70,11 +70,7 @@ SYSTEM = tuple(BODIES.values())
 PAIRS = tuple(combinations(SYSTEM))
 
 
-def advance(dt, n, bodies=SYSTEM, pairs=PAIRS,write_decision=True):
-    if write_decision:
-        f = open("python_output.csv",'w')
-        first_line = "name,x,y,z\n"
-        f.write(first_line)
+def advance(dt, n, bodies=SYSTEM, pairs=PAIRS):
     for i in range(n):
         for ([x1, y1, z1], v1, m1, [x2, y2, z2], v2, m2) in pairs:
             dx = x1 - x2
@@ -94,15 +90,7 @@ def advance(dt, n, bodies=SYSTEM, pairs=PAIRS,write_decision=True):
             r[0] += dt * vx
             r[1] += dt * vy
             r[2] += dt * vz
-        if write_decision:
-            for i in BODIES:
-                name=i
-                coordinates = BODIES[i][0]
-                x,y,z=coordinates
-                line="{},{},{},{}\n".format(name,x,y,z)
-                f.write(line)
-    if write_decision:
-        f.close()
+
 
 def report_energy(bodies=SYSTEM, pairs=PAIRS, e=0.0):
     for ((x1, y1, z1), v1, m1, (x2, y2, z2), v2, m2) in pairs:
@@ -126,17 +114,17 @@ def offset_momentum(ref, bodies=SYSTEM, px=0.0, py=0.0, pz=0.0):
     v[2] = pz / m
 
 
-def main(n, ref="sun",write_decision=True):
+def main(n, ref="sun"):
     offset_momentum(BODIES[ref])
     report_energy()
-    advance(0.01, n, write_decision=write_decision)
+    advance(0.01, n)
     report_energy()
 
 
 if __name__ == "__main__":
     if len(sys.argv) >= 2:
         main(int(sys.argv[1]))
-        # Below code was typed by shen qiwei
+        # Below code was modified by shen qiwei
         with open("python_output.csv", "w", newline="") as file:
             csvWriter = csv.writer(file)
             csvWriter.writerow(["name of the body", "position x", "position y", "position z"])
@@ -148,7 +136,7 @@ if __name__ == "__main__":
                     for j in range(0, len(y[0])):
                         addList.append(y[0][j])
                     csvWriter.writerow(addList)
-        # Upon code was
+        # Upon code was modified by shen qiwei
         sys.exit(0)
     else:
         print(f"This is {sys.argv[0]}")
